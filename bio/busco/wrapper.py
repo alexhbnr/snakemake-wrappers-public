@@ -26,12 +26,17 @@ download_path = (
     " --download_path {} ".format(download_path_dir) if download_path_dir else ""
 )
 
+if lineage.startswith("auto-lineage"):
+    lineage = f"--{lineage}"
+else:
+    lineage = f"--lineage {lineage}"
+
 # note: --force allows snakemake to handle rewriting files as necessary
 # without needing to specify *all* busco outputs as snakemake outputs
 shell(
     "busco --in {snakemake.input} --out {out} --force "
     "{out_path} "
-    "--cpu {snakemake.threads} --mode {mode} --lineage {lineage} "
+    "--cpu {snakemake.threads} --mode {mode} {lineage} "
     "{download_path} "
     "{extra} {log}"
 )
